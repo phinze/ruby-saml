@@ -33,6 +33,9 @@ require "onelogin/ruby-saml/validation_error"
 require "onelogin/ruby-saml/security_strategies/pure_ruby"
 
 module XMLSecurity
+  STRATEGIES = [
+    Onelogin::Saml::SecurityStrategies::PureRuby
+  ]
 
   class SignedDocument < REXML::Document
     attr_accessor :signed_element_id
