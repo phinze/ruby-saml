@@ -1,10 +1,11 @@
 require 'test_helper'
-require 'xml_security'
+
+module Onelogin::Saml
 
 class XmlSecurityTest < Test::Unit::TestCase
   include XMLSecurity
 
-  XMLSecurity::STRATEGIES.each do |strategy|
+  Onelogin::Saml::XMLSecurity::STRATEGIES.each do |strategy|
     context strategy do
       context "XmlSecurity" do
         setup do
@@ -150,4 +151,6 @@ class XmlSecurityTest < Test::Unit::TestCase
       end
     end
   end
+end
+
 end

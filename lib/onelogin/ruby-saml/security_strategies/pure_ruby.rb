@@ -89,11 +89,6 @@ module Onelogin
           hash == digest_value
         end
 
-        def extract_signed_element_id
-          reference_element       = REXML::XPath.first(self, "//ds:Signature/ds:SignedInfo/ds:Reference", {"ds"=>DSIG})
-          self.signed_element_id  = reference_element.attribute("URI").value[1..-1] unless reference_element.nil?
-        end
-
         def canon_algorithm(element)
           algorithm = element.attribute('Algorithm').value if element
           case algorithm

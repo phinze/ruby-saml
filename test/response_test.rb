@@ -8,7 +8,7 @@ class RubySamlTest < Test::Unit::TestCase
     end
 
     should "be able to parse a document which contains ampersands" do
-      XMLSecurity::SignedDocument.any_instance.stubs(:digests_match?).returns(true)
+      Onelogin::Saml::XMLSecurity::SignedDocument.any_instance.stubs(:digests_match?).returns(true)
       Onelogin::Saml::Response.any_instance.stubs(:validate_conditions).returns(true)
 
       response = Onelogin::Saml::Response.new(ampersands_response)

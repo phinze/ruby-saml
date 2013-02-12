@@ -31,20 +31,29 @@ require "digest/sha1"
 require "digest/sha2"
 require "onelogin/ruby-saml/validation_error"
 require "onelogin/ruby-saml/security_strategies/pure_ruby"
+require "onelogin/ruby-saml/security_strategies/xml_sec"
 
-module XMLSecurity
-  STRATEGIES = [
-    Onelogin::Saml::SecurityStrategies::PureRuby
-  ]
+module Onelogin
+  module Saml
+    module XMLSecurity
+      STRATEGIES = [
+        Onelogin::Saml::SecurityStrategies::PureRuby,
+      ]
 
-  class SignedDocument < REXML::Document
-    attr_accessor :signed_element_id
+      class SignedDocument < REXML::Document
+        attr_accessor :signed_element_id
 
-    def initialize(response, strategy=Onelogin::Saml::SecurityStrategies::PureRuby)
-      super(response)
-      self.extend(strategy)
-      extract_signed_element_id
+        def initialize(response, strategy=Onelogin::Saml::SecurityStrategies::PureRuby)
+          super(response)
+          self.extend(strategy)
+          extract_signed_element_id
+        end
+
+        def extract_signed_element_id
+          reference_element       = REXML::XPath.first(self, "//ds:Signature/ds:SignedInfo/ds:Reference", {"ds"=>"http://www.w3.org/2000/09/xmldsig#"})
+          self.signed_element_id  = reference_element.attribute("URI").value[1..-1] unless reference_element.nil?
+        end
+      end
     end
-
   end
 end

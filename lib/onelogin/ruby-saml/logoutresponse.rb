@@ -1,4 +1,3 @@
-require "xml_security"
 require "time"
 require "base64"
 require "zlib"
