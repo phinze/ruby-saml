@@ -120,7 +120,7 @@ class RubySamlTest < Test::Unit::TestCase
         settings = Onelogin::Saml::Settings.new
         response.settings = settings
         settings.idp_cert_fingerprint = "28:74:9B:E8:1F:E8:10:9C:A8:7C:A9:C3:E3:C5:01:6C:92:1C:B4:BA"
-        XMLSecurity::SignedDocument.any_instance.expects(:validate_doc).returns(true)
+        response.document.expects(:validate_doc).returns(true)
         assert response.validate!
       end
 
