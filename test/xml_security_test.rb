@@ -58,21 +58,25 @@ class XmlSecurityTest < Test::Unit::TestCase
 
       context "Algorithms" do
         should "validate using SHA1" do
+          skip('adfs_response_* fixtures are generated with cert that xmlsec cannot verify') if strategy.is? :xmlsec
           @document = XMLSecurity::SignedDocument.new(fixture(:adfs_response_sha1, false), strategy)
           assert @document.validate("F1:3C:6B:80:90:5A:03:0E:6C:91:3E:5D:15:FA:DD:B0:16:45:48:72")
         end
 
         should "validate using SHA256" do
+          skip('adfs_response_* fixtures are generated with cert that xmlsec cannot verify') if strategy.is? :xmlsec
           @document = XMLSecurity::SignedDocument.new(fixture(:adfs_response_sha256, false), strategy)
           assert @document.validate("28:74:9B:E8:1F:E8:10:9C:A8:7C:A9:C3:E3:C5:01:6C:92:1C:B4:BA")
         end
 
         should "validate using SHA384" do
+          skip('adfs_response_* fixtures are generated with cert that xmlsec cannot verify') if strategy.is? :xmlsec
           @document = XMLSecurity::SignedDocument.new(fixture(:adfs_response_sha384, false), strategy)
           assert @document.validate("F1:3C:6B:80:90:5A:03:0E:6C:91:3E:5D:15:FA:DD:B0:16:45:48:72")
         end
 
         should "validate using SHA512" do
+          skip('adfs_response_* fixtures are generated with cert that xmlsec cannot verify') if strategy.is? :xmlsec
           @document = XMLSecurity::SignedDocument.new(fixture(:adfs_response_sha512, false), strategy)
           assert @document.validate("F1:3C:6B:80:90:5A:03:0E:6C:91:3E:5D:15:FA:DD:B0:16:45:48:72")
         end
@@ -98,7 +102,6 @@ class XmlSecurityTest < Test::Unit::TestCase
           end
 
           should_eventually 'support inclusive canonicalization' do
-
             response = Onelogin::Saml::Response.new(fixture("tdnf_response.xml"))
             response.stubs(:conditions).returns(nil)
             assert !response.is_valid?

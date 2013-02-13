@@ -2,8 +2,11 @@ module Onelogin
   module Saml
     module SecurityStrategies
       module PureRuby
-        C14N = "http://www.w3.org/2001/10/xml-exc-c14n#"
         DSIG = "http://www.w3.org/2000/09/xmldsig#"
+
+        def self.is?(sym)
+          sym == :pureruby
+        end
 
         def validate(idp_cert_fingerprint, soft = true)
           # get cert from response
@@ -73,6 +76,7 @@ module Onelogin
           cert_text               = Base64.decode64(base64_cert)
           cert                    = OpenSSL::X509::Certificate.new(cert_text)
 
+
           # signature method
           signature_algorithm     = algorithm(REXML::XPath.first(signed_info_element, "//ds:SignatureMethod", {"ds"=>DSIG}))
 
@@ -111,14 +115,6 @@ module Onelogin
           end
         end
 
-        def extract_inclusive_namespaces
-          if element = REXML::XPath.first(self, "//ec:InclusiveNamespaces", { "ec" => C14N })
-            prefix_list = element.attributes.get_attribute("PrefixList").value
-            prefix_list.split(" ")
-          else
-            []
-          end
-        end
       end
     end
   end

@@ -38,7 +38,9 @@ module Onelogin
     module XMLSecurity
       STRATEGIES = [
         Onelogin::Saml::SecurityStrategies::PureRuby,
+        Onelogin::Saml::SecurityStrategies::XMLSec
       ]
+      C14N = "http://www.w3.org/2001/10/xml-exc-c14n#"
 
       class SignedDocument < REXML::Document
         attr_accessor :signed_element_id
@@ -52,6 +54,15 @@ module Onelogin
         def extract_signed_element_id
           reference_element       = REXML::XPath.first(self, "//ds:Signature/ds:SignedInfo/ds:Reference", {"ds"=>"http://www.w3.org/2000/09/xmldsig#"})
           self.signed_element_id  = reference_element.attribute("URI").value[1..-1] unless reference_element.nil?
+        end
+
+        def extract_inclusive_namespaces
+          if element = REXML::XPath.first(self, "//ec:InclusiveNamespaces", { "ec" => C14N })
+            prefix_list = element.attributes.get_attribute("PrefixList").value
+            prefix_list.split(" ")
+          else
+            []
+          end
         end
       end
     end
